@@ -1,7 +1,7 @@
 import sqlite3
-from chefkoch import recipeScraper
+from chefkoch import RecipeScraper
 
-chefkoch = recipeScraper()
+chefkoch = RecipeScraper()
 con = sqlite3.connect('recipes.db')
 
 cur = con.cursor()
