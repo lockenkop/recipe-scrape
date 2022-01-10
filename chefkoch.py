@@ -1,11 +1,13 @@
-from os import name
+import platform
 import re
 import sqlite3
 import time
 from sqlite3.dbapi2 import Time
-
-from recipe_scrapers import scrape_me
-
+os_name = platform.platform()
+if "arm" not in os_name:
+    from recipe_scrapers import scrape_me
+else:
+    print("this system cannot scrape recipes")
 class RecipeScraper():
     def __init__(self) -> None:
         pass
