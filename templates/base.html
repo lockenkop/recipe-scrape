@@ -1,10 +1,13 @@
 <html>
-    <body><p>Hello, Chefkoch!</p><br>
+    <body>
+        <p>Hello, Chefkoch!</p><br>
+        <p>Wonach willst du suchen?</p>
         <form action="/">
             <label for="Zutaten"></label><br>
             <input type="text" name="ingreds" id="1"><br>
-            <label for="Namen"></label><br>
+            <label for="Namen">Rezeptname</label><br>
             <input type="text" name="name" id="2">
+            <input type="submit" value="Suche starten">
         </form>
         {% block content %}{% endblock %}
     </body>
