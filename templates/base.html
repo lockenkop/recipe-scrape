@@ -1,12 +1,11 @@
 <html>
-    <body><p>Hello, Chefkoch!</p>
-        {% block content %}{% endblock %}
+    <body><p>Hello, Chefkoch!</p><br>
+        <form action="/">
+            <label for="Zutaten"></label><br>
+            <input type="text" name="ingreds" id="1"><br>
+            <label for="Namen"></label><br>
+            <input type="text" name="name" id="2">
         </form>
-
-    <footer>
-        <p> Version 0.1 </p>
-        <p> Merse 2022</p>
-        <p> Jonas Fenchel</p>
-        </footer>
+        {% block content %}{% endblock %}
     </body>
 </html>
