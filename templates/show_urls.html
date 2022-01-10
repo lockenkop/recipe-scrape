@@ -1,11 +1,9 @@
-<html>
-    <body><p>show urls</p>
-        <form method="POST">
-            <label for="ingreds">Zutaten, mit Leerzeichen getrennt:</label><br>
-            <input type="text" id="lname" name="ingreds">
-            <input type="submit" id="submit" name="submit">
+{% extends "base.html" %}
+
+{% block content %}
+    <body>
         </form>
-            <h1>{{urls|length}} Treffer für {{ingreds}}</h1>
+            <h1>{{urls|length}} Treffer für {{ingreds}}{{name}}</h1>
         {% for url in urls %}
             <a href={{url[0]}}>
                 <img src={{url[1]}} alt="{{url[1]}}" style="width:320px;height:180px"> 
@@ -19,4 +17,5 @@
         <p> Jonas Fenchel</p>
         </footer>
     </body>
-</html>
+
+{% endblock %}
