@@ -6,7 +6,7 @@ app = Flask(__name__)
 
 @app.route("/")
 def index():
-    return render_template('index.html')
+    return render_template('base.html')
 
 @app.route("/", methods = ['POST'])
 def ingred_search():
@@ -20,6 +20,5 @@ def ingred_search():
         return render_template('show_urls.html', urls=found_recipes, ingreds=ingreds)
     if name_to_search:  
         found_recipes = chefkoch.showRecipe(name_to_search)
-        print(found_recipes)
         return render_template('show_urls.html', urls=found_recipes, name=name_to_search)
     return name_to_search
