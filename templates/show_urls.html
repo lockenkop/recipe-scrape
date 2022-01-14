@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <body>
+    
         </form>
             <h1>{{urls|length}} Treffer für {{ingreds}}{{name}}</h1>
         {% for url in urls %}
@@ -10,12 +10,6 @@
             </a>
             <label>{{url[0].split("/")[5].split(".")[0]}}</label>
             <br>
-        {% endfor %}
-    <footer>
-        <p> Version 0.1 </p>
-        <p> Merse 2022</p>
-        <p> Jonas Fenchel</p>
-        </footer>
-    </body>
+        {% endfor %}    
 
 {% endblock %}
