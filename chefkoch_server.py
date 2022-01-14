@@ -2,6 +2,8 @@ from flask import Flask, render_template, request
 from chefkoch import RecipeScraper
 
 
+
+
 app = Flask(__name__)
 
 chefkoch = RecipeScraper()
@@ -15,6 +17,7 @@ def index():
 @app.route("/", methods = ['POST'])
 def ingred_search():
     print("searching")
+    
     chefkoch = RecipeScraper()
     amount = chefkoch.recipe_amount()
     ingreds = request.form['ingreds']

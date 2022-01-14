@@ -25,6 +25,7 @@ class RecipeScraper():
         for table_name in table_names:
             ingreds_matching = 0
             for ingred in ingreds_to_search:
+                ingred = ingred.capitalize()
                 ingred = self.lemma.find_lemma(ingred, "N")
                 querry = "SELECT recipe_url, image_url FROM '{}' WHERE ingred LIKE '%{}%'".format(table_name[0], ingred)
                 self.cur.execute(querry)

@@ -1,6 +1,10 @@
 from germalemma import GermaLemma
 
 lemma = GermaLemma()
-
-singular = lemma.find_lemma("Kartoffeln","N")
+singular = "kartoffeln"
 print(singular)
+singular = singular.capitalize()
+print(singular)
+plural = lemma.find_lemma(singular,"N")
+
+print(plural)
