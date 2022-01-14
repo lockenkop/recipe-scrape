@@ -86,8 +86,11 @@ class RecipeScraper():
         ingreds = scraper.ingredients()
         
         if not self.table_exists(title):
-            print(f"adding {title}")
-            self.cur.execute("CREATE TABLE '{}' (ingred text, recipe_url text, image_url text)".format(title))
+            try:
+                print(f"adding {title}")
+                self.cur.execute("CREATE TABLE '{}' (ingred text, recipe_url text, image_url text)".format(title))
+            except:
+                print("Mousse au chocolat du Wichser!")
             for ingred in ingreds:
                 self.cur.execute(" insert into '{}' values (?, ?, ?)".format(title), (ingred, recipe_url, image_url))
         else:
