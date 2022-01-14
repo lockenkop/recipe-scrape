@@ -31,6 +31,11 @@ class RecipeScraper():
             if ingreds_matching == len(ingreds_to_search):
                 links.append(result)
         return links
+    def recipe_amount(self):
+        self.cur.execute("SELECT name FROM sqlite_master WHERE type='table'")
+        tables = self.cur.fetchall()
+        amount = len(tables)
+        return amount
 
     def table_exists(self, name):
         querry = f"SELECT 1 FROM sqlite_master WHERE type='table' AND name='{name}'"

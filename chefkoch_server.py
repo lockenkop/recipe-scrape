@@ -4,15 +4,16 @@ from chefkoch import RecipeScraper
 
 app = Flask(__name__)
 
+chefkoch = RecipeScraper()
+
 @app.route("/")
 def index():
-    print("EINWAHL!")
-    return render_template('base.html')
+    return render_template('base.html', amount=chefkoch.recipe_amount())
 
 @app.route("/", methods = ['POST'])
 def ingred_search():
     print("searching")
-    chefkoch = RecipeScraper()
+    
     ingreds = request.form['ingreds']
     name_to_search = request.form['recipe_name']
     if ingreds:
