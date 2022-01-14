@@ -4,6 +4,7 @@ chefkoch recipe scraper and databank
 
 import platform
 import sqlite3
+from germalemma import GermaLemma
 
 os_name = platform.platform()
 if "arm" not in os_name:
@@ -15,15 +16,16 @@ class RecipeScraper():
         self.con = sqlite3.connect('recipes.db')
         self.cur = self.con.cursor()
         self.URL = "https://www.chefkoch.de/rezepte/zufallsrezept/"
+        self.lemma = GermaLemma()
 
     def search_ingred(self, ingreds_to_search):
         self.cur.execute("SELECT name FROM sqlite_master WHERE type='table';")
-
         table_names = self.cur.fetchall()
         links = []
         for table_name in table_names:
             ingreds_matching = 0
             for ingred in ingreds_to_search:
+                ingred = self.lemma.find_lemma(ingred, "N")
                 querry = "SELECT recipe_url, image_url FROM '{}' WHERE ingred LIKE '%{}%'".format(table_name[0], ingred)
                 self.cur.execute(querry)
                 result = self.cur.fetchone()
@@ -62,7 +64,6 @@ class RecipeScraper():
         return found_recipes
 
     def scrapeRecipe(self, amount, url=None):
-        
         if url is None:
             scraper = scrape_me(self.URL)
         elif url:
@@ -91,3 +92,9 @@ class RecipeScraper():
         else:
             print("recipe already exists")
         self.con.commit()
+
+    def singularize(self, words):
+        singulars= []
+        for word in words:
+            singulars.append(self.lemma.find_lemma(word), "N")
+        return singulars
