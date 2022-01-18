@@ -2,7 +2,6 @@
 chefkoch recipe scraper and databank
 """
 
-from msilib.schema import Error
 import platform
 import sqlite3
 from germalemma import GermaLemma
