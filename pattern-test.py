@@ -1,7 +1,7 @@
 from germalemma import GermaLemma
 
 lemma = GermaLemma()
-singular = "kartoffeln"
+singular = "Karotten"
 print(singular)
 singular = singular.capitalize()
 print(singular)

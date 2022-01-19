@@ -4,10 +4,10 @@
         <h2>Wonach willst du kuchen?</h2>
         <h3>Wir haben {{amount}} Rezepte</h3>
         <form method="POST">
-            <label for="Zutaten">Zutaten mit Leerzeichen getrennt</label><br>
+            <label for="Zutaten">Zutaten mit Leerzeichen getrennt und in singular, nicht alle plurale werden korrekt zur Einzahl umgewandlet</label><br>
             <input type="text" name="ingreds" id="1"><br>
             <label for="Namen">Rezeptname</label><br>
-            <input type="text" name="recipe_name" id="2">
+            <input type="text" name="recipe_name" id="2"><br>
             <input type="checkbox" name="vegetarisch"><label>vegetarisch</label>
             <input type="checkbox" name="vegan"><label>vegan</label>
             <input type="submit" value="Suche starten" id ="submit">

@@ -5,6 +5,8 @@ chefkoch recipe scraper and databank
 import platform
 import sqlite3
 from germalemma import GermaLemma
+import logging
+import datetime
 
 os_name = platform.platform()
 if "arm" not in os_name:
@@ -17,15 +19,38 @@ class RecipeScraper():
         self.cur = self.con.cursor()
         self.URL = "https://www.chefkoch.de/rezepte/zufallsrezept/"
         self.lemma = GermaLemma()
+
+        date = datetime.date.today()
+
+        logging.basicConfig(filename=f'{date.year}-{date.month}-{date.year}.log', encoding='utf-8', level=logging.DEBUG)
+        
+        
         self.nonVegetarisch = [
             "Fleisch",
             "Keule",
             "Fisch",
-            "Hähnchenkeule"
+            "Hähnchenkeule",
+            "Rind",
+            "Hackfleisch",
+            "Schwein",
+            "Kalb",
+            "Leber",
+            "Niere",
+            "Entrecôte"
         ]
         self.nonVegan = [
             "Ei",
-            "Honig",            
+            "Honig",
+            "Butter",
+        ]
+        self.vegetarianAlternatives = [
+            "vegetarisch",
+            "vegetarian"    
+        ]
+        self.veganAlternatives = [
+            "vegan"
+            "Margarine",
+            ""
         ]
 
     def lemmantizer(self, ingreds):
@@ -44,11 +69,11 @@ class RecipeScraper():
         for table_name in table_names:
             try:
                 ingreds_matching = 0
-                check = 0
-                check = self.check_vegan(table_name[0], mode)
-                if check:
-                    print("not vegan rejecting recipe")
-                    continue
+                
+                if mode > 0:
+                    if self.check_vegan(table_name, mode):
+                        print("not vegan rejecting recipe")
+                        continue
                 for ingred in ingreds_to_search:
                     querry = "SELECT recipe_url, image_url FROM '{}' WHERE ingred LIKE '%{}%'".format(table_name[0], ingred)
                     self.cur.execute(querry)
@@ -56,8 +81,9 @@ class RecipeScraper():
                     if result: ingreds_matching += 1
                 if ingreds_matching == len(ingreds_to_search):
                     links.append(result)
+        
             except:
-                return "das hat nciht funtioniert"
+                return [["//////wrong return value","check code"]]
         return links
 
     def recipe_amount(self):
@@ -71,42 +97,67 @@ class RecipeScraper():
         return self.cur.execute(querry).fetchone() is not None
 
     def check_vegan(self, table, mode):
-        querry_for_all_ingreds = "SELECT ingred FROM '{}'".format(table)
+        not_vegetarian = 0
+        not_vegan = 0
+        has_alternative = 0
+        
+        querry_for_all_ingreds = "SELECT ingred FROM '{}'".format(table[0])
         self.cur.execute(querry_for_all_ingreds)
         ingreds_in_recipe = self.cur.fetchall()
+        
 
         for ingred in ingreds_in_recipe:
             ingred_words = ingred[0].split()
+            
             for ingred_word in ingred_words:             
                 if mode == 1:
-                    if ingred_word in self.nonVegetarisch:
-                        print(f"{ingred} not vegetarian")
-                        return 1
+                    for nonVegetarisch  in self.nonVegetarisch: 
+                        not_vegetarian = nonVegetarisch in ingred_word
+                        if not_vegetarian:
+                            print(f"{ingred_word} not vegetarian")
+                            for ingred_word in ingred_words:
+                                for vegetarianAlternative in self.vegetarianAlternatives:
+                                    has_alternative = vegetarianAlternative in ingred_word
+                                    if has_alternative:
+                                        print(f"{ingred} has alternative")
+                            return 1
+                        
+                    
+                    
+                    
+
                 elif mode == 2:
-                    if ingred_word in self.nonVegan:
-                        print(f"{ingred} not vegan")
-                        return 1
+                    not_vegan = ingred_word in self.nonVegan or ingred_word in self.nonVegetarisch
+                    has_alternative = ingred_word in self.veganAlternatives
+                if  not_vegan and not has_alternative:
+                    print(f"{ingred} not vegan, or vegetarian")
+                    return 1
         else:
             return 0
 
-    def showRecipe(self, name):
+    def showRecipe(self, name, mode):
         found_tables = []
         found_recipes = []
 
-        self.cur.execute("SELECT name FROM sqlite_master WHERE type='table'")
-
+        querry_for_all_tables = "SELECT name FROM sqlite_master WHERE type='table'" 
+        self.cur.execute(querry_for_all_tables)
         tables = self.cur.fetchall()
+
         for table in tables:
             if name in table[0]:
                 found_tables.append(table)
         for name in found_tables:
             print(name)
             querry = f"SELECT recipe_url, image_url FROM '{name[0]}'"
-            print(querry)
+            # print(querry)
             self.cur.execute(querry)
             recipe = self.cur.fetchone()
-            found_recipes.append(recipe)
-        return found_recipes
+            if not self.check_vegan(name, mode):
+                found_recipes.append(recipe)
+        if isinstance(found_recipes, list):
+            return found_recipes
+        else:
+            return [["//////wrong return value","check code"]]
 
     def scrapeRecipe(self, amount, url=None):
         if url is None:
@@ -117,7 +168,6 @@ class RecipeScraper():
         if amount == "inf":
             while True:
                 try:
-                    print("going again")
                     self.scrapeRecipe(1)
                 except RuntimeError:
                     print("Hupala")
@@ -134,9 +184,9 @@ class RecipeScraper():
                 print(f"adding {title}")
                 self.cur.execute("CREATE TABLE '{}' (ingred text, recipe_url text, image_url text)".format(title))
             except:
-                print("Mousse au chocolat du Wichser!")
+                print(f"tried to add {title} a table that already existed, table_exists failed")
             for ingred in ingreds:
                 self.cur.execute(" insert into '{}' values (?, ?, ?)".format(title), (ingred, recipe_url, image_url))
         else:
-            print("recipe already exists")
+            print(f"recipe already exists {title}")
         self.con.commit()
