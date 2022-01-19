@@ -8,8 +8,6 @@ con = sqlite3.connect('recipes.db')
 cur = con.cursor()
 
 
-if url is list
-
 chefkoch.scrapeRecipe("inf")
 
 # text = "Salz Pfeffer"
