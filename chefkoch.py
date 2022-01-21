@@ -8,6 +8,8 @@ from germalemma import GermaLemma
 import logging
 import datetime
 
+from numpy import add_docstring
+
 os_name = platform.platform()
 if "arm" not in os_name:
     from recipe_scrapers import scrape_me
@@ -21,6 +23,8 @@ class RecipeScraper():
         self.lemma = GermaLemma()
 
         date = datetime.date.today()
+
+        self.logging_level="DEBUG"
 
         logging.basicConfig(filename=f'{date.year}-{date.month}-{date.year}.log', encoding='utf-8', level=logging.DEBUG)
         
@@ -157,7 +161,9 @@ class RecipeScraper():
         if isinstance(found_recipes, list):
             return found_recipes
         else:
+            if self.logging_level == "DEBUG": logging.debug("foundrecipes didnt return list")
             return [["//////wrong return value","check code"]]
+
 
     def scrapeRecipe(self, amount, url=None):
         if url is None:
@@ -166,12 +172,16 @@ class RecipeScraper():
             scraper = scrape_me(url)
             amount = 1
         if amount == "inf":
+            if self.logging_level == "DEBUG": logging.debug("starting infinite scrape")
             while True:
                 try:
                     self.scrapeRecipe(1)
                 except RuntimeError:
+                    if self.logging_level == "DEBUG": logging.debug("Hupala occured")
                     print("Hupala")
+
         recipe_url = scraper.canonical_url()
+        if self.logging_level == "DEBUG": logging.debug(f"got new URL {recipe_url}")
         title = scraper.title()
         image_url = scraper.image()
         char_to_remove = ["-", "\"", "\'"]
@@ -182,10 +192,12 @@ class RecipeScraper():
         if not self.table_exists(title):
             try:
                 print(f"adding {title}")
+                if self.logging_level == "DEBUG": logging.debug(f"adding {title}")
                 self.cur.execute("CREATE TABLE '{}' (ingred text, recipe_url text, image_url text)".format(title))
             except:
                 print(f"tried to add {title} a table that already existed, table_exists failed")
             for ingred in ingreds:
+                if self.logging_level == "DEBUG": logging.debug(f"adding {ingred} to table {title}")
                 self.cur.execute(" insert into '{}' values (?, ?, ?)".format(title), (ingred, recipe_url, image_url))
         else:
             print(f"recipe already exists {title}")
