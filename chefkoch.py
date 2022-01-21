@@ -26,7 +26,7 @@ class RecipeScraper():
 
         self.logging_level="DEBUG"
 
-        logging.basicConfig(filename=f'{date.year}-{date.month}-{date.year}.log', encoding='utf-8', level=logging.DEBUG)
+        logging.basicConfig(filename=f'{date.year}-{date.month}-{date.year}.log', level=logging.DEBUG)
         
         
         self.nonVegetarisch = [
