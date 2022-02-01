@@ -75,7 +75,7 @@ class RecipeScraper():
         table_names = self.cur.fetchall()
         links = []
         ingreds_to_search = self.lemmantizer(ingreds_to_search)
-        print(ingreds_to_search)
+        print(f"searching for: {ingreds_to_search}")
         for table_name in table_names:
             try:
                 ingreds_matching = 0
@@ -157,7 +157,7 @@ class RecipeScraper():
             if name in table[0]:
                 found_tables.append(table)
         for name in found_tables:
-            print(name)
+            # print(name)
             querry = f"SELECT recipe_url, image_url FROM '{name[0]}'"
             # print(querry)
             self.cur.execute(querry)
