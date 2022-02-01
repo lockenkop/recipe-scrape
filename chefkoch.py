@@ -45,7 +45,9 @@ class RecipeScraper():
             "Kassler",
             "Bacon",
             "Huhn",
-            "Hühnerbrust"
+            "Hühnerbrust",
+            "Hühnerbrüste",
+            "Cabanossi"
         ]
         self.nonVegan = [
             "Ei",
