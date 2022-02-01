@@ -40,12 +40,18 @@ class RecipeScraper():
             "Kalb",
             "Leber",
             "Niere",
-            "Entrecôte"
+            "Entrecôte",
+            "Kasseler",
+            "Kassler",
+            "Bacon",
+            "Huhn",
+            "Hühnerbrust"
         ]
         self.nonVegan = [
             "Ei",
             "Honig",
             "Butter",
+            "Ei(er)"
         ]
         self.vegetarianAlternatives = [
             "vegetarisch",
