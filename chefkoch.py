@@ -120,7 +120,7 @@ class RecipeScraper():
             ingred_words = ingred[0].split()
             
             for ingred_word in ingred_words:             
-                if mode == 1:
+                if mode >= 1:
                     for nonVegetarisch  in self.nonVegetarisch: 
                         not_vegetarian = nonVegetarisch in ingred_word
                         if not_vegetarian:
